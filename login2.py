@@ -16,6 +16,8 @@ import urllib
 import urllib2
 
 
+url = "http://10.3.8.211"
+path_file = "./userid_passwd"
 
 def run(url, userid, passwd):
     '''
@@ -36,12 +38,22 @@ def run(url, userid, passwd):
         return 0
 
 
+def load_data():
+    dict_uid_passwd = {}
+    with open(path_file) as file:
+        for line in file:
+            line = line.strip()
+            ll = map(lambda x:x.strip(), line.split("\t"))
+            if len(ll) != 2:
+                continue
+            userid = ll[0]
+            passwd = ll[1]
+            dict_uid_passwd[userid] = passwd
+    return dict_uid_passwd
+
+
 def main():
-    url = "http://10.3.8.211"
-    dict_uid_passwd = {
-        "2011211534": "207310", "2011211535": "123456", "2011211544": "gzc12345",
-        "2011211545": "067514", "2011211654": "122118","2012211325": "214527", "2013140848": "122533"
-    }
+    dict_uid_passwd = load_data()
     for uid in dict_uid_passwd:
         passwd = dict_uid_passwd[uid]
         res = run(url, uid, passwd)

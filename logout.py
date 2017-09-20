@@ -3,10 +3,10 @@
 
 
 ###########################################  
-# File Name     : login.py
+# File Name     : logout.py
 # Author        : liqibo(qibolee@163.com)
 # Created Time  : 2017/9/10
-# Brief         : log in to internet
+# Brief         : log out from internet
 ###########################################
 
 
@@ -26,12 +26,12 @@ def main():
     response = urllib2.urlopen(request)
     result = response.read()
 
-    if response.code != 200:
-        print 'error code: %d' % response.code
-    else:
-        print result
+    print "response code: %d" % response.code
 
-    return 0
+    if response.code != 200:
+        return 1
+    else:
+        return 0
 
 
 if __name__ == "__main__":

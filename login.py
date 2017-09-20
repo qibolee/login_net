@@ -30,11 +30,12 @@ def main():
     response = urllib2.urlopen(request)
     result = response.read()
 
+    print "response code: %d, userid: %s" % (response.code, userid)
+
     if response.code != 200:
-        print 'error code: %d' % response.code
         return 1
     else:
-        print result
+        #print result
         return 0
 
 
