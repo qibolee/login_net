@@ -26,8 +26,6 @@ def get_flow_msg():
     response = urllib2.urlopen(request)
     result = response.read()
 
-    print "response code: %d" % response.code
-
     if response.code != 200:
         return ""
     else:
@@ -35,10 +33,8 @@ def get_flow_msg():
 
 
 def parse_msg(msg):
-    #print >> sys.stderr, msg
     if not msg:
-        print "message is empty"
-        return 1
+        return ""
     dict_data = {"time": "", "flow": "", "fee": ""}
     for key in dict_data:
         idx = msg.find("%s=" % key)
@@ -69,15 +65,43 @@ def parse_msg(msg):
         dict_data["fee"] = float(dict_data["fee"])
         dict_data["fee"] = "%.2f" % (dict_data["fee"] / 10000.0)
 
-    for key in dict_data:
-        print "%s: %s" % (key, dict_data[key])
+    return dict_data
 
-    return 0
+
+def get_login_data():
+    msg = get_flow_msg()
+    result = parse_msg(msg)
+    return result
+
+
+def is_logged(result=None):
+    if not result:
+        result = get_login_data()
+    cnt = 0
+    for key in result:
+        if result[key]:
+            cnt += 1
+    return cnt == len(result)
+
+
+def show_flow_data(result=None):
+    if not result:
+        result = get_login_data()
+    print "---------------------------"
+    for key in result:
+        print "%s: %s" % (key, result[key])
+    print "---------------------------"
 
 
 def main():
-    msg = get_flow_msg()
-    parse_msg(msg)
+    result = get_login_data()
+    if is_logged(result):
+        show_flow_data(result)
+    else:
+        print "---------------------------"
+        print "not login now"
+        print "---------------------------"
+
 
 if __name__ == "__main__":
     main()

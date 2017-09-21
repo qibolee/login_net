@@ -14,12 +14,13 @@ __revision__ = '0.1'
 import sys
 import urllib
 import urllib2
+import check_flow
 
 
 url = "http://10.3.8.211"
 path_file = "./userid_passwd"
 
-def run(url, userid, passwd):
+def do_login(url, userid, passwd):
     '''
     login to Internet
     '''
@@ -29,13 +30,7 @@ def run(url, userid, passwd):
     response = urllib2.urlopen(request)
     result = response.read()
 
-    print "response code: %d, userid: %s" % (response.code, userid)
-
-    if response.code != 200:
-        return 1
-    else:
-        #print result
-        return 0
+    return response.code == 200
 
 
 def load_data():
@@ -53,12 +48,25 @@ def load_data():
 
 
 def main():
+    result = check_flow.get_login_data()
+    if check_flow.is_logged(result):
+        print "already logged in, don't need login again"
+        check_flow.show_flow_data(result)
+        return 0
     dict_uid_passwd = load_data()
     for uid in dict_uid_passwd:
         passwd = dict_uid_passwd[uid]
-        res = run(url, uid, passwd)
-        if res == 0:
+        res = do_login(url, uid, passwd)
+        if not res:
+            print "login request failed: %s %s" % (uid, passwd)
+            continue
+        result = check_flow.get_login_data()
+        if check_flow.is_logged(result):
+            print "login success: %s %s" % (uid, passwd)
+            check_flow.show_flow_data(result)
             break
+        else:
+            print "login result failed: %s %s" % (uid, passwd)
 
 
 if __name__ == "__main__":
