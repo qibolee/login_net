@@ -35,6 +35,7 @@ def get_flow_msg():
 
 
 def parse_msg(msg):
+    #print >> sys.stderr, msg
     if not msg:
         print "message is empty"
         return 1
@@ -49,8 +50,28 @@ def parse_msg(msg):
                 dict_data[key] += msg[idx]
                 idx += 1
 
+    # handle flow
+    if dict_data["fee"]:
+        list_flow = ["KB", "MB", "GB", "TB"]
+        idx = 0
+        dict_data["flow"] = float(dict_data["flow"])
+        while dict_data["flow"] > 1024 and idx + 1< len(list_flow):
+            dict_data["flow"] /= 1024.0
+            idx += 1
+        dict_data["flow"] = "%.2f%s" % (dict_data["flow"], list_flow[idx])
+    
+    #handle time
+    if dict_data["time"]:
+        dict_data["time"] = "%smin" % dict_data["time"]
+
+    #handle fee
+    if dict_data["time"]:
+        dict_data["fee"] = float(dict_data["fee"])
+        dict_data["fee"] = "%.2f" % (dict_data["fee"] / 10000.0)
+
     for key in dict_data:
         print "%s: %s" % (key, dict_data[key])
+
     return 0
 
 
