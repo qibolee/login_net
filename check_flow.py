@@ -33,6 +33,9 @@ def get_flow_msg():
 
 
 def parse_msg(msg):
+    '''
+    parse flow data
+    '''
     if not msg:
         return ""
     dict_data = {"time": "", "flow": "", "fee": ""}
@@ -69,12 +72,18 @@ def parse_msg(msg):
 
 
 def get_login_data():
+    '''
+    get flow data
+    '''
     msg = get_flow_msg()
     result = parse_msg(msg)
     return result
 
 
 def is_logged(result=None):
+    '''
+    check is login
+    '''
     if not result:
         result = get_login_data()
     cnt = 0
@@ -85,6 +94,9 @@ def is_logged(result=None):
 
 
 def show_flow_data(result=None):
+    '''
+    show flow data
+    '''
     if not result:
         result = get_login_data()
     print "---------------------------"
@@ -94,6 +106,9 @@ def show_flow_data(result=None):
 
 
 def main():
+    '''
+    check is login first
+    '''
     result = get_login_data()
     if is_logged(result):
         show_flow_data(result)
