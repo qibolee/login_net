@@ -14,15 +14,18 @@ __revision__ = '0.1'
 import sys
 import urllib
 import urllib2
+import check_flow
 
 
 url = "http://10.3.8.211"
-userid = "xx"
-passwd = "xx"
+dict_uid_passwd = {
+    "2012345678": "hello",
+    "2016345678": "hello"
+}
 
-def main():
+def do_login(url, userid, passwd):
     '''
-    login to Internet
+    do login to Internet
     '''
     data = {"DDDDD":userid, "upass":passwd, "0MKKey":""}
     data = urllib.urlencode(data)
@@ -30,13 +33,31 @@ def main():
     response = urllib2.urlopen(request)
     result = response.read()
 
-    print "response code: %d, userid: %s" % (response.code, userid)
+    return response.code == 200
 
-    if response.code != 200:
-        return 1
-    else:
-        #print result
+
+def main():
+    '''
+    check is login first
+    '''
+    result = check_flow.get_login_data()
+    if check_flow.is_logged(result):
+        print "already logged in, don't need login again"
+        check_flow.show_flow_data(result)
         return 0
+    for uid in dict_uid_passwd:
+        passwd = dict_uid_passwd[uid]
+        res = do_login(url, uid, passwd)
+        if not res:
+            print "login request failed: %s %s" % (uid, passwd)
+            continue
+        result = check_flow.get_login_data()
+        if check_flow.is_logged(result):
+            print "login success: %s" % uid
+            check_flow.show_flow_data(result)
+            break
+        else:
+            print "login result failed: %s %s" % (uid, passwd)
 
 
 if __name__ == "__main__":
