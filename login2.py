@@ -18,11 +18,13 @@ import check_flow
 
 
 url = "http://10.3.8.211"
-path_file = "./userid_passwd"
+path_dir = "/home/gitlab/develop/python/net_login"
+file_name = "userid_passwd"
+path_file = "%s/%s" % (path_dir, userid_passwd)
 
 def do_login(url, userid, passwd):
     '''
-    login to Internet
+    do login to Internet
     '''
     data = {"DDDDD":userid, "upass":passwd, "0MKKey":""}
     data = urllib.urlencode(data)
@@ -34,6 +36,9 @@ def do_login(url, userid, passwd):
 
 
 def load_data():
+    '''
+    get uid-passwd data from file
+    '''
     dict_uid_passwd = {}
     with open(path_file) as file:
         for line in file:
@@ -48,6 +53,9 @@ def load_data():
 
 
 def main():
+    '''
+    check is login first
+    '''
     result = check_flow.get_login_data()
     if check_flow.is_logged(result):
         print "already logged in, don't need login again"
@@ -62,7 +70,7 @@ def main():
             continue
         result = check_flow.get_login_data()
         if check_flow.is_logged(result):
-            print "login success: %s %s" % (uid, passwd)
+            print "login success: %s" % uid
             check_flow.show_flow_data(result)
             break
         else:
