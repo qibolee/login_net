@@ -18,7 +18,7 @@ import check_flow
 
 
 url = "http://10.3.8.211"
-path_dir = "/home/gitlab/develop/python/net_login"
+path_dir = "/home/gitlab/develop/python/net_login/data"
 file_name = "userid_passwd"
 path_file = "%s/%s" % (path_dir, file_name)
 
