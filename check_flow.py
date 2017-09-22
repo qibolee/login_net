@@ -3,10 +3,10 @@
 
 
 ###########################################  
-# File Name     : logout.py
+# File Name     : check_flow.py
 # Author        : liqibo(qibolee@163.com)
 # Created Time  : 2017/9/10
-# Brief         : log out from internet
+# Brief         : get flow data from internet
 ###########################################
 
 
