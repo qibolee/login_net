@@ -21,7 +21,7 @@ url = "http://10.3.8.211/F.htm"
 
 def do_logout():
     '''
-    logout from 10.3.8.211/F.htm
+    do logout from Internet
     '''
     request = urllib2.Request(url=url)
     response = urllib2.urlopen(request)
@@ -31,6 +31,9 @@ def do_logout():
 
 
 def main():
+    '''
+    check is login first
+    '''
     result = check_flow.get_login_data()
     if check_flow.is_logged(result):
         check_flow.show_flow_data(result)
